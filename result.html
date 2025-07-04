@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Result</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    .score-box {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 30px 20px;
+      max-width: 400px;
+      margin: 40px auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .score-box h2 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+    p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .result-message {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      margin-top: 25px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    a {
+      text-decoration: none;
+    }
+
+    @media (max-width: 500px) {
+      .score-box {
+        padding: 20px 15px;
+      }
+      p, .result-message {
+        font-size: 16px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="score-box">
+    <h2>Your Result</h2>
+    <p><strong>Correct:</strong> {{ correct }} / {{ total }}</p>
+    <p><strong>Score:</strong> {{ score }}%</p>
+    <p><strong>Eligible For:</strong> {{ role }}</p>
+
+    <div class="result-message">
+      {% if role == 'Disqualified for Cheating' %}
+        ❌ You have been disqualified for cheating. You are not eligible for any role.
+      {% elif role == 'Fail' %}
+        😞 Don't worry, try again soon!
+      {% elif role == 'QA' %}
+        🧪 You're eligible for QA!
+      {% elif role == 'DBMS' %}
+        💾 You're eligible for DBMS!
+      {% elif role == 'AI DevOps' %}
+        🤖 You're eligible for AI DevOps!
+      {% endif %}
+    </div>
+
+    <a href="/download-pdf">
+      <button>Download Result as PDF</button>
+    </a>
+  </div>
+  <script>
+  // Prevent back navigation to test page after submission
+  if (window.history && window.history.pushState) {
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function () {
+      alert("You have already submitted the test. You cannot go back.");
+      window.history.pushState(null, null, window.location.href);
+    };
+  }
+</script>
+
+
+</body>
+</html>

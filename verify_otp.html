@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        error: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97)',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(8px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+                            '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .otp-input:focus {
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+        }
+        .password-input:focus {
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+        }
+        .error-message {
+            animation: shake 0.5s;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 font-sans flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden animate-fade-in">
+        <div class="bg-primary-600 p-6 text-center">
+            <h1 class="text-2xl font-bold text-white">Verify Your Account</h1>
+            <p class="text-primary-100 mt-1">Enter the OTP sent to your email</p>
+        </div>
+        
+        <div class="p-8">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="mb-6 error-message">
+                        <ul class="bg-error-50 border-l-4 border-error-500 text-error-700 p-4 rounded">
+                            {% for message in messages %}
+                                <li class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="space-y-6">
+                <div class="space-y-2">
+                    <label for="otp" class="block text-sm font-medium text-gray-700">OTP Code</label>
+                    <input 
+                        type="text" 
+                        name="otp" 
+                        id="otp"
+                        required 
+                        maxlength="6"
+                        class="otp-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary-500 focus:ring-primary-500 transition duration-200 text-center tracking-widest font-mono text-xl"
+                        placeholder="••••••"
+                        pattern="\d{6}"
+                        inputmode="numeric"
+                    >
+                    <p class="text-xs text-gray-500 mt-1">Enter the 6-digit code sent to your email</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Create Password</label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password"
+                        required
+                        class="password-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary-500 focus:ring-primary-500 transition duration-200"
+                        placeholder="Create a strong password"
+                    >
+                    <p class="text-xs text-gray-500 mt-1">Minimum 8 characters with letters and numbers</p>
+                </div>
+                
+                <button 
+                    type="submit" 
+                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 active:scale-95"
+                >
+                    Verify & Continue
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="absolute bottom-4 right-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary-300 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+        </svg>
+    </div>
+</body>
+</html>
